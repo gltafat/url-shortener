@@ -12,7 +12,12 @@ class ShortUrlController extends Controller
 {
     public function index()
     {
-        return view('shorten');
+        $shortUrls = auth()->user()
+            ->shortUrls()
+            ->latest()
+            ->get();
+
+        return view('shorten', compact('shortUrls'));
     }
 
     public function store(Request $request)
@@ -24,6 +29,7 @@ class ShortUrlController extends Controller
         $shortUrl = ShortUrl::create([
             'original_url' => $request->original_url,
             'code' => Str::random(6),
+            'user_id' => auth()->id(),
         ]);
 
         return redirect()->back()->with(
