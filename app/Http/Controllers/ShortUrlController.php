@@ -18,7 +18,7 @@ class ShortUrlController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'original_url' => 'required|url',
+            'original_url' => ['required', 'url'],
         ]);
 
         $shortUrl = ShortUrl::create([
