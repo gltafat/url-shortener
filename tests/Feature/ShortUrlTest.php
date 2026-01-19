@@ -32,6 +32,7 @@ class ShortUrlTest extends TestCase
         $shortUrl = ShortUrl::create([
             'original_url' => 'https://example.com',
             'code' => 'abc123',
+            'clicks' => 0,
             'user_id' => User::factory()->create()->id,
         ]);
 
