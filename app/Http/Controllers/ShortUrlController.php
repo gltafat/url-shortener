@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ShortUrl;
+use Illuminate\Support\Str;
 
 
 
@@ -22,7 +23,7 @@ class ShortUrlController extends Controller
 
         $shortUrl = ShortUrl::create([
             'original_url' => $request->original_url,
-            'code' => substr(md5(uniqid()), 0, 6),
+            'code' => Str::random(6),
         ]);
 
         return redirect()->back()->with(
