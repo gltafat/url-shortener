@@ -44,7 +44,7 @@
             <thead class="bg-gray-100">
                 <tr>
                     <th class="p-2 border">URL</th>
-                    <th class="p-2 border">Code</th>
+                    <th class="p-2 border">Lien court</th>
                     <th class="p-2 border">Clicks</th>
                     <th class="p-2 border">Actions</th>
                 </tr>
@@ -57,14 +57,25 @@
                             {{ $shortUrl->original_url }}
                         </td>
 
-                        <td class="p-2 border">
-                            <a
-                                href="{{ url('/' . $shortUrl->code) }}"
-                                target="_blank"
-                                class="text-blue-600 underline"
-                            >
-                                {{ $shortUrl->code }}
-                            </a>
+                        <td class="p-2 border text-center">
+                            <div class="flex items-center justify-center gap-2">
+                                <a
+                                    href="{{ url('/' . $shortUrl->code) }}"
+                                    target="_blank"
+                                    class="text-blue-600 underline"
+                                >
+                                    {{ url('/' . $shortUrl->code) }}
+                                </a>
+
+                                <button
+                                    onclick="copyToClipboard('{{ url('/' . $shortUrl->code) }}')"
+                                    class="text-gray-500 hover:text-black flex items-center"
+                                    title="Copier le lien"
+                                >
+                                    <x-heroicon-o-clipboard class="w-5 h-5"/>
+                                </button>
+
+                            </div>
                         </td>
 
                         <td class="p-2 border text-center">
@@ -77,14 +88,13 @@
                                     href="{{ route('short-urls.edit', $shortUrl) }}"
                                     class="text-blue-600 hover:text-blue-800 flex items-center"
                                 >
-                                    <x-heroicon-o-pencil class="w-5 h-5 block"/>
+                                    <x-heroicon-o-pencil class="w-5 h-5"/>
                                 </a>
 
                                 <form
                                     method="POST"
                                     action="{{ route('short-urls.destroy', $shortUrl) }}"
                                     onsubmit="return confirm('Supprimer ce lien ?')"
-                                    class="flex items-center"
                                 >
                                     @csrf
                                     @method('DELETE')
@@ -93,12 +103,11 @@
                                         type="submit"
                                         class="text-red-600 hover:text-red-800 flex items-center"
                                     >
-                                        <x-heroicon-o-trash class="w-5 h-5 block"/>
+                                        <x-heroicon-o-trash class="w-5 h-5"/>
                                     </button>
                                 </form>
                             </div>
                         </td>
-
                     </tr>
                 @empty
                     <tr>
@@ -114,4 +123,16 @@
             {{ $shortUrls->links() }}
         </div>
     </div>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    alert('Lien copié dans le presse-papier');
+                })
+                .catch(() => {
+                    alert('Erreur lors de la copie');
+                });
+        }
+    </script>
 </x-app-layout>
