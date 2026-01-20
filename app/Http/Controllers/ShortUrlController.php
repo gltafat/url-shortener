@@ -66,13 +66,20 @@ class ShortUrlController extends Controller
         return redirect()->back()->with('success', 'Lien supprimé');
     }
 
-    public function redirect($code)
+    public function redirect(string $code)
     {
-        $shortUrl = ShortUrl::where('code', $code)->firstOrFail();
+        $shortUrl = ShortUrl::where('code', $code)->first();
+
+        if (! $shortUrl) {
+            return response()
+                ->view('short-url-expired', [], 410);
+        }
+
         $shortUrl->increment('clicks');
 
         return redirect($shortUrl->original_url);
     }
+
 
     private function authorizeOwner(ShortUrl $shortUrl): void
     {
