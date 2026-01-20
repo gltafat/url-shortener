@@ -76,10 +76,12 @@ class ShortUrlController extends Controller
         }
 
         $shortUrl->increment('clicks');
+        $shortUrl->update([
+        'last_used_at' => now(),
+        ]);
 
         return redirect($shortUrl->original_url);
     }
-
 
     private function authorizeOwner(ShortUrl $shortUrl): void
     {
