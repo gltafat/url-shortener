@@ -59,17 +59,30 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 
-## Installation
+# URL Shortener
 
-```bash
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan serve
+Application Laravel permettant de raccourcir des URLs, avec un dashboard utilisateur, le suivi des clics et une interface.
+
+---
+
+## Fonctionnalités
+
+- Création de liens courts
+- Redirection automatique vers l’URL originale
+- Tableau de bord utilisateur
+- Copie du lien court en 1 clic
+- Compteur du nombre de clics par lien
+- Modification et suppression des liens
+- Page dédiée pour les liens expirés ou supprimés
+- Authentification (inscription / connexion)
+
+---
+
+## Installation avec Docker
 
 ### Prérequis
-- PHP >= 8.2
-- Composer
+- Docker
+- Docker Compose
 - Git
 
 ### Étapes
@@ -77,7 +90,8 @@ php artisan serve
 ```bash
 git clone https://github.com/gltafat/url-shortener.git
 cd url-shortener
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan serve
+
+docker compose up -d
+docker compose exec app cp .env.example .env
+docker compose exec app php artisan key:generate
+docker compose exec app php artisan migrate
