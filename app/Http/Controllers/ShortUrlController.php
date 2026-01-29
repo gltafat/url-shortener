@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreShortUrlRequest;
 use App\Models\ShortUrl;
 use Illuminate\Support\Str;
 
@@ -20,14 +20,10 @@ class ShortUrlController extends Controller
         return view('dashboard', compact('shortUrls'));
     }
 
-    public function store(Request $request)
+    public function store(StoreShortUrlRequest $request)
     {
-        $request->validate([
-            'original_url' => ['required', 'url'],
-        ]);
-
         ShortUrl::create([
-            'original_url' => $request->original_url,
+            'original_url' => $request->validated()['original_url'],
             'code' => Str::random(6),
             'user_id' => auth()->id(),
         ]);
@@ -42,16 +38,12 @@ class ShortUrlController extends Controller
         return view('shorturls.edit', compact('shortUrl'));
     }
 
-    public function update(Request $request, ShortUrl $shortUrl)
+    public function update(StoreShortUrlRequest $request, ShortUrl $shortUrl)
     {
         $this->authorizeOwner($shortUrl);
 
-        $request->validate([
-            'original_url' => ['required', 'url'],
-        ]);
-
         $shortUrl->update([
-            'original_url' => $request->original_url,
+            'original_url' => $request->validated()['original_url'],
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Lien mis à jour');
