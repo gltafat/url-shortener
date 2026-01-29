@@ -29,11 +29,9 @@ class ShortUrlTest extends TestCase
 
     public function test_it_redirects_to_original_url()
     {
-        $shortUrl = ShortUrl::create([
-            'original_url' => 'https://example.com',
+        $shortUrl = ShortUrl::factory()->create([
             'code' => 'abc123',
-            'clicks' => 0,
-            'user_id' => User::factory()->create()->id,
+            'original_url' => 'https://example.com',
         ]);
 
         $response = $this->get('/abc123');
@@ -43,11 +41,9 @@ class ShortUrlTest extends TestCase
 
     public function test_it_increments_clicks_on_redirect()
     {
-        $shortUrl = ShortUrl::create([
-            'original_url' => 'https://example.com',
+        $shortUrl = ShortUrl::factory()->create([
             'code' => 'click01',
             'clicks' => 0,
-            'user_id' => User::factory()->create()->id,
         ]);
 
         $this->get('/click01');

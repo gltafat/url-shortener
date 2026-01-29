@@ -15,10 +15,8 @@ class DashboardTest extends TestCase
     {
         $user = User::factory()->create();
 
-        ShortUrl::create([
+        ShortUrl::factory()->create([
             'original_url' => 'https://laravel.com',
-            'code' => 'laravel',
-            'clicks' => 0,
             'user_id' => $user->id,
         ]);
 
@@ -26,7 +24,7 @@ class DashboardTest extends TestCase
             ->actingAs($user)
             ->get('/dashboard');
 
-        $response->assertStatus(200);
+        $response->assertOk();
         $response->assertSee('https://laravel.com');
     }
 
@@ -34,10 +32,7 @@ class DashboardTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $shortUrl = ShortUrl::create([
-            'original_url' => 'https://delete-me.com',
-            'code' => 'delete',
-            'clicks' => 0,
+        $shortUrl = ShortUrl::factory()->create([
             'user_id' => $user->id,
         ]);
 
@@ -45,7 +40,7 @@ class DashboardTest extends TestCase
             ->actingAs($user)
             ->delete("/shorten/{$shortUrl->id}");
 
-        $response->assertStatus(302);
+        $response->assertRedirect();
 
         $this->assertDatabaseMissing('short_urls', [
             'id' => $shortUrl->id,
@@ -56,21 +51,15 @@ class DashboardTest extends TestCase
     {
         $user = User::factory()->create();
 
-        for ($i = 1; $i <= 15; $i++) {
-            ShortUrl::create([
-                'original_url' => "https://example{$i}.com",
-                'code' => "code{$i}",
-                'clicks' => 0,
-                'user_id' => $user->id,
-            ]);
-        }
+        ShortUrl::factory()
+            ->count(15)
+            ->create(['user_id' => $user->id]);
 
         $response = $this
             ->actingAs($user)
             ->get('/dashboard');
 
-        $response->assertStatus(200);
-
+        $response->assertOk();
         $response->assertSee('Next');
     }
 
