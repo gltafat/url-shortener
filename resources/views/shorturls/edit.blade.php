@@ -24,19 +24,23 @@
                 @enderror
             </div>
 
-            <div class="mt-4">
-                <button class="bg-blue-500  px-4 py-2 rounded flex items-center gap-2 hover:bg-blue-600">
-                    <x-heroicon-o-check class="w-5 h-5"/>
-                    Enregistrer
-                </button>
+<div class="mt-4 flex items-center gap-4">
+    <button
+        class="bg-blue-500 px-4 py-2 rounded flex items-center gap-2 hover:bg-blue-600"
+    >
+        <x-heroicon-o-check class="w-5 h-5"/>
+        Enregistrer
+    </button>
 
+    <a
+        href="{{ route('dashboard') }}"
+        class="text-gray-600 hover:text-gray-800 flex items-center gap-2"
+    >
+        <x-heroicon-o-arrow-left class="w-5 h-5"/>
+        Retour
+    </a>
+</div>
 
-                <a href="{{ route('dashboard') }}" class="ml-2 text-gray-600 hover:text-gray-800 flex items-center gap-2">
-                    <x-heroicon-o-arrow-left class="w-5 h-5"/>
-                    Retour
-                </a>
-
-            </div>
         </form>
     </div>
 </x-app-layout>
