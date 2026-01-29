@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreShortUrlRequest;
 use App\Models\ShortUrl;
 use Illuminate\Support\Str;
-
+use App\Services\ShortUrlService;
 
 
 class ShortUrlController extends Controller
 {
+    public function __construct(
+        private ShortUrlService $shortUrlService
+    ) {}
+
     public function index()
     {
         $shortUrls = auth()->user()
@@ -22,11 +26,10 @@ class ShortUrlController extends Controller
 
     public function store(StoreShortUrlRequest $request)
     {
-        ShortUrl::create([
-            'original_url' => $request->validated()['original_url'],
-            'code' => Str::random(6),
-            'user_id' => auth()->id(),
-        ]);
+        $this->shortUrlService->create(
+            $request->validated()['original_url'],
+            auth()->id()
+        );
 
         return redirect()->back()->with('success', 'Lien créé avec succès');
     }
