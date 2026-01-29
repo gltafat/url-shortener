@@ -33,14 +33,14 @@ class ShortUrlController extends Controller
 
     public function edit(ShortUrl $shortUrl)
     {
-        $this->authorizeOwner($shortUrl);
+        $this->authorize('update', $shortUrl);
 
         return view('shorturls.edit', compact('shortUrl'));
     }
 
     public function update(StoreShortUrlRequest $request, ShortUrl $shortUrl)
     {
-        $this->authorizeOwner($shortUrl);
+        $this->authorize('update', $shortUrl);
 
         $shortUrl->update([
             'original_url' => $request->validated()['original_url'],
@@ -51,7 +51,7 @@ class ShortUrlController extends Controller
 
     public function destroy(ShortUrl $shortUrl)
     {
-        $this->authorizeOwner($shortUrl);
+        $this->authorize('delete', $shortUrl);
 
         $shortUrl->delete();
 
@@ -73,12 +73,5 @@ class ShortUrlController extends Controller
         ]);
 
         return redirect($shortUrl->original_url);
-    }
-
-    private function authorizeOwner(ShortUrl $shortUrl): void
-    {
-        if ($shortUrl->user_id !== auth()->id()) {
-            abort(403);
-        }
     }
 }
