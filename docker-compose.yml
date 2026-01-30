@@ -1,5 +1,11 @@
+version: "3.9"
+
 services:
   app:
     build: .
+    container_name: url-shortener-app
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
     ports:
       - "8000:8000"

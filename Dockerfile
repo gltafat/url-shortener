@@ -11,12 +11,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-COPY . .
 
-RUN composer install --no-interaction --prefer-dist
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-RUN npm install && npm run build
+CMD ["/entrypoint.sh"]
 
-EXPOSE 8000
-
-CMD php artisan serve --host=0.0.0.0 --port=8000
